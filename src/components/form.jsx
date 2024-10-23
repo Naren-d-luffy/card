@@ -121,7 +121,7 @@ export default function Form() {
           <button
             onClick={handleSubmit}
             className={`w-full p-2 rounded-lg text-lg font-semibold ${
-              isFormComplete ? "bg-blue-400 hover:bg-blue-500 text-white" : "bg-gray-300 cursor-not-allowed"
+              isFormComplete ? "bg-blue-400 hover:bg-blue-500 text-white" : "bg-blue-200 cursor-not-allowed"
             }`}
             disabled={!isFormComplete}
           >

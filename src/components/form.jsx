@@ -9,6 +9,7 @@ export default function Form() {
     mobileNo: "",
     email: "",
     address: "",
+    color: "", // Add color field
   });
 
   const navigate = useNavigate(); // Hook to navigate between pages
@@ -28,7 +29,35 @@ export default function Form() {
   const handleSubmit = (e) => {
     e.preventDefault(); // Prevent page reload
     if (isFormComplete) {
-      navigate('/color'); // Navigate to the Color page on successful form submission
+      // PATCH request to update the document in the MongoDB collection
+      fetch("http://localhost:5000/api/data", {
+        method: "PATCH",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          business: formData.businessName,
+          name: formData.yourName,
+          designation: formData.designation,
+          mobile: formData.mobileNo,
+          email: formData.email,
+          address: formData.address,
+          color: formData.color, // Send color field to the backend
+        }),
+      })
+        .then((response) => {
+          if (!response.ok) {
+            throw new Error("Network response was not ok");
+          }
+          return response.json();
+        })
+        .then((data) => {
+          console.log("Form successfully submitted:", data);
+          navigate('/color'); // Navigate to the Color page on successful form submission
+        })
+        .catch((error) => {
+          console.error("Error submitting form:", error);
+        });
     }
   };
 
@@ -116,6 +145,18 @@ export default function Form() {
                 className="w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-green-500"
               />
             </div>
+          </div>
+
+          {/* Color selection field */}
+          <div className="mb-6 space-y-2">
+            <label className="text-white text-lg">Choose a Color</label>
+            <input
+              type="color"
+              name="color"
+              value={formData.color}
+              onChange={handleInputChange}
+              className="w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-green-500"
+            />
           </div>
 
           <button
